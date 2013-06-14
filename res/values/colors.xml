@@ -1,0 +1,4 @@
+<resources>
+    <color name="drop_start">#000000</color>
+    <color name="drop_end">#dfdfdf</color>
+</resources>

@@ -8,6 +8,8 @@ import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
 import com.opentok.android.OpentokException;
@@ -29,17 +31,14 @@ public class HelloWorldActivity extends Activity implements Publisher.Listener, 
     // automatically publish during Session.Listener.onSessionConnected
     private static final boolean AUTO_PUBLISH = true;
     // automatically subscribe during Session.Listener.onSessionReceivedStream IFF stream is our own
-    private static final boolean SUBSCRIBE_TO_SELF = true;
+    private static final boolean SUBSCRIBE_TO_SELF = false;
 
 
     /* Fill the following variables using your own Project info from the Dashboard */
     // Replace with your generated Session ID
-    private static final String SESSION_ID =
-            null;
+    private static final String SESSION_ID = null;
     // Replace with your generated Token (use Project Tools or from a server-side library)
-    private static final String TOKEN =
-            null;
-
+    private static final String TOKEN = null;
     private RelativeLayout publisherViewContainer;
     private RelativeLayout subscriberViewContainer;
     private Publisher publisher;
@@ -50,10 +49,12 @@ public class HelloWorldActivity extends Activity implements Publisher.Listener, 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.main_layout);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-
+        
         publisherViewContainer = (RelativeLayout) findViewById(R.id.publisherview);
         subscriberViewContainer = (RelativeLayout) findViewById(R.id.subscriberview);
 

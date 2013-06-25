@@ -110,6 +110,7 @@ public class ControlBarView  extends RelativeLayout {
         if (ViewType.SubscriberView.equals(type)) {
             controlParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
             controlParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
+            controlParams.topMargin = dpToPx(6);
 
         } else if (ViewType.PublisherView.equals(type)) {
 

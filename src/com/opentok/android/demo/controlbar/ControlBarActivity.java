@@ -23,23 +23,12 @@ public class ControlBarActivity extends HelloWorldActivity implements ControlBar
     private ControlBarView subscriberControlBarView;
     private RelativeLayout mainLayout;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mainLayout = (RelativeLayout) findViewById(R.id.mainlayout);
     }
-
-    @Override
-    public void onSessionConnected() {
-        Log.i(LOGTAG, "session connected");
-        super.onSessionConnected();
-        Publisher publisher = this.getPublisher();
-        if (null != publisher) {
-            publisher.getView().setOnClickListener(new ControlBarClickViewListener(this.getPublisher().getName()));
-        }
-    }
-
+    
     @Override
     public void onStop() {
         super.onStop();
@@ -47,51 +36,64 @@ public class ControlBarActivity extends HelloWorldActivity implements ControlBar
     }
 
     @Override
+    public void onSessionConnected() {
+        Log.i(LOGTAG, "session connected");
+        super.onSessionConnected();
+
+        // Here, we're assuming the superclass has created a new publisher.
+        Publisher publisher = this.getPublisher();
+
+        if (publisher != null) {
+            publisherControlBarView = new ControlBarView(ControlBarActivity.this, ViewType.PublisherView,
+                publisher.getName(), mainLayout, ControlBarActivity.this, publisher.getPublishAudio());
+            mainLayout.addView(publisherControlBarView);
+            publisherControlBarView.setVisibility(View.INVISIBLE);
+
+            View publisherView = publisher.getView();
+            publisherView.setOnClickListener(new ToggleVisibilityClickListener(publisherControlBarView));
+
+        }
+    }
+
+    @Override
     public void onSessionReceivedStream(final Stream stream) {
         Log.i(LOGTAG, "session received stream");
         super.onSessionReceivedStream(stream);
-        if (this.getSubscriber() != null) {
-            this.getSubscriber().getView().setOnClickListener(new ControlBarClickViewListener(stream.getName()));
+
+        // Here, we're assuming the superclass has created a new subscriber.
+        Subscriber subscriber = this.getSubscriber();
+        if (null != subscriber) {
+            subscriberControlBarView = new ControlBarView(ControlBarActivity.this, ViewType.SubscriberView,
+                    stream.getName(), mainLayout, ControlBarActivity.this, subscriber.getSubscribeToAudio());
+            mainLayout.addView(subscriberControlBarView);
+            subscriberControlBarView.setVisibility(View.INVISIBLE);
+
+            View subscriberView = subscriber.getView();
+            subscriberView.setOnClickListener(new ToggleVisibilityClickListener(subscriberControlBarView));
         }
     }
 
     /**
-     * A ControlBarClickViewListener is launched when publisher or subscriber view are clicked.
+     * Toggles visibility of a view when a click event is processed.
      */
-    private class ControlBarClickViewListener implements View.OnClickListener {
-        private String streamName;
+    private class ToggleVisibilityClickListener implements View.OnClickListener {
+        private View targetView;
 
-        public ControlBarClickViewListener(String streamName) {
-            this.streamName = streamName;
+        public ToggleVisibilityClickListener(View view) {
+            this.targetView = view;
         }
 
         @Override
         public void onClick(View arg0) {
             Publisher publisher = ControlBarActivity.this.getPublisher();
-            if (null != publisher) {
-                if (null == publisherControlBarView) {
-                    publisherControlBarView = new ControlBarView(ControlBarActivity.this,
-                            ControlBarView.ViewType.PublisherView, streamName, mainLayout, ControlBarActivity.this,
-                            publisher.getPublishVideo(),
-                            publisher.getPublishAudio());
-                    mainLayout.addView(publisherControlBarView);
-                    publisherControlBarView.setVisibility(View.INVISIBLE);
-                }
-                publisherControlBarView.toggleVisibility();
+            if (null == publisher) {
+                return;
             }
 
-            Subscriber subscriber = ControlBarActivity.this.getSubscriber();
-            if (null != subscriber) {
-                if (null == subscriberControlBarView) {
-                    subscriberControlBarView = new ControlBarView(ControlBarActivity.this,
-                            ControlBarView.ViewType.SubscriberView, streamName, mainLayout,
-                            ControlBarActivity.this,
-                            subscriber.getSubscribeToVideo(),
-                            subscriber.getSubscribeToAudio());
-                    ControlBarActivity.this.getSubscriberView().addView(subscriberControlBarView);
-                    subscriberControlBarView.setVisibility(View.INVISIBLE);
-                }
-                subscriberControlBarView.toggleVisibility();
+            if (View.VISIBLE == targetView.getVisibility()) {
+                targetView.setVisibility(View.INVISIBLE);
+            } else {
+                targetView.setVisibility(View.VISIBLE);
             }
         }
     }

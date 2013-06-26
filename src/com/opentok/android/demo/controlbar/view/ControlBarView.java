@@ -123,8 +123,6 @@ public class ControlBarView  extends RelativeLayout {
 
         setLayoutParams(controlParams);
 
-        adjustWidthControlBar();
-
         //right-aligned control bar elements
         rightControlBar = new LinearLayout(context);
         rightControlBar.setId(0x0BA5);
@@ -135,6 +133,7 @@ public class ControlBarView  extends RelativeLayout {
         leftControlBar.setId(0x0F00);
         leftControlBar.setBackgroundColor(0xFF282828);
 
+        adjustWidthControlBar();
 
         RelativeLayout.LayoutParams rightParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
                 LayoutParams.MATCH_PARENT);
@@ -318,31 +317,29 @@ public class ControlBarView  extends RelativeLayout {
         RelativeLayout.LayoutParams params = (LayoutParams) getLayoutParams();
 
         switch (mode) {
-        case Large:
-            params.width = dpToPx(500);
-            break;
-        case Medium:
-            params.width = dpToPx(320);
-            break;
-        case Small:
-            params.width = dpToPx(150);
-            break;
-        case Minimal:
-            showNameBar = false;
-            params.width = LayoutParams.WRAP_CONTENT;
-            break;
-        default:
-            Log.wtf("control-bar", "Unknown layout mode " + mode);
-            break;
+            case Large:
+                params.width = dpToPx(500);
+                break;
+            case Medium:
+                params.width = dpToPx(320);
+                break;
+            case Small:
+                params.width = dpToPx(150);
+                break;
+            case Minimal:
+                showNameBar = false;
+                params.width = LayoutParams.WRAP_CONTENT;
+                break;
+            default:
+                Log.wtf("control-bar", "Unknown layout mode " + mode);
+                break;
         }
 
-        // show/collapse the left side of the control bar.
-        if (leftControlBar != null) {
-           if (showNameBar) {
-               leftControlBar.setVisibility(View.VISIBLE);
-        	} else {
-        	   leftControlBar.setVisibility(View.GONE);
-        	}
+        //show/collapse the left side of the control bar.
+        if (showNameBar) {
+            leftControlBar.setVisibility(View.VISIBLE);
+        } else {
+            leftControlBar.setVisibility(View.GONE);
         }
         setLayoutParams(params);
     }

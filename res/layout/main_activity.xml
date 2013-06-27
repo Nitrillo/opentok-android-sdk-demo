@@ -1,60 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="match_parent"
-android:layout_height="wrap_content">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+android:orientation="vertical" >
 
-<TableRow
-    android:id="@+id/tableRow1"
- 	android:layout_width="40dp"
-    android:layout_height="40dp" 
-    android:layout_weight="1"
-    android:onClick="startHelloWorldApp">
-    
-    <RelativeLayout
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_weight="1" >
-
-        <TextView android:text="@string/helloworld"
-		android:id="@+id/helloWorld"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:textSize="16dp"
-		android:gravity="center"/>
-        
-       <View android:id="@+id/firstDivider"
-        android:layout_height="2dp"
-        android:layout_width="fill_parent"
-        android:background="#FFFFFF"/>
-       
-    </RelativeLayout>
-</TableRow>
-
-<TableRow
-    android:id="@+id/tableRow2"
-    android:layout_width="40dp"
-    android:layout_height="40dp" 
-    android:layout_weight="1"
-    android:onClick="startControlBarApp">
-    <RelativeLayout
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_weight="1" >
-
-        <TextView android:text="@string/controlbar"
-		android:id="@+id/controlbar"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:textSize="16dp"
-		android:gravity="center"/>
-        
-        <View android:id="@+id/firstDivider"
-        android:layout_height="2dp"
-        android:layout_width="fill_parent"
-        android:background="#FFFFFF" />
-    </RelativeLayout>
-</TableRow>
-
-</TableLayout>
+<ListView 
+    android:id="@+id/listview"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"/>
+</LinearLayout>
 
 

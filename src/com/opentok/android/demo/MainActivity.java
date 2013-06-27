@@ -12,6 +12,10 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 /**
  * Main demo app for getting started with the OpenTok Android SDK.
@@ -24,11 +28,37 @@ public class MainActivity extends Activity {
     private static final String LOGTAG = "demo-opentok-sdk";
     private WakeLock wakeLock;
 
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
-
+       
+        final ListView listActivities = (ListView) findViewById(R.id.listview);
+        String[] activityNames = {
+            getString(R.string.helloworld),
+            getString(R.string.controlbar)
+        };
+        
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+            android.R.layout.simple_list_item_1, activityNames);
+        listActivities.setAdapter(adapter);
+              
+        listActivities.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> a, View v, int position, long id) {
+                // these positions are hard-coded to some example activities, they match
+                // the array contents of activityNames above.
+                if (0 == position) {
+                    startHelloWorldApp();
+                } else if (1 == position) {
+                    startControlBarApp();
+                } else {
+                    Log.wtf(LOGTAG, "unknown item clicked?");
+                }
+            }
+        });
+       
         // Disable screen dimming
         PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK, "Full Wake Lock");
@@ -71,9 +101,8 @@ public class MainActivity extends Activity {
 
     /**
      * Starts the Hello-World demo app. See HelloWorldActivity.java
-     * @param v
      */
-    public void startHelloWorldApp(View v) {
+    public void startHelloWorldApp() {
 
         Log.i(LOGTAG, "starting hello-world app");
 
@@ -84,9 +113,8 @@ public class MainActivity extends Activity {
 
     /**
      * Starts the Control Bar demo app. See ControlBarActivity.java
-     * @param v
      */
-    public void startControlBarApp(View v) {
+    public void startControlBarApp() {
 
         Log.i(LOGTAG, "starting control bar app");
 
@@ -94,5 +122,4 @@ public class MainActivity extends Activity {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
-
 }

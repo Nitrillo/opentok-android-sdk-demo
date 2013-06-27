@@ -1,7 +1,7 @@
 opentok-androd-sdk-demo
 =======================
 
-This sample app is a basic sample app that shows the most basic features of the OpenTok iOS SDK. This app has three activities:
+This sample app is a basic sample app that shows the most basic features of the OpenTok Android SDK. This app has three activities:
 
 * **com.opentok.android.demo.helloworld.MainAcivity** &#151; This activity provides a user interface for launching either of the
 other two activities.
@@ -40,9 +40,11 @@ Testing the sample app
 3.  Connect your Android device to a USB port on your computer. Set up [USB debugging](http://developer.android.com/tools/device.html)
     on your device.
 
-4.  Debug the app on your device, selecting MainActivity as the launch action.
+4.  Run the app on your device, selecting MainActivity as the launch action.
 
     The app should start on your connected device.
+
+    The first time the app runs, it prompts the user to allow the app to use the camera to stream live video.
 
 5.  Tap the Hello World button in the main view of the app. This launches the Hello World activity in a new view.
 
@@ -50,7 +52,7 @@ Testing the sample app
     stream, which is displayed onscreen. Then, the same audio-video stream shows up as a subscribed stream (along with any
     other streams currently in the session).
 
-6. Debug the app again, but this time, tap the Control Bar button.
+6. Run the app again, but this time, tap the Control Bar button.
 
 7.  Close the app. Now set up the app to subscribe to audio-video streams other than your own:
     -   Near the top of the HelloWorldActivity.java file, change the `SUBSCRIBE_TO_SELF` property to be set to `false`.
@@ -73,7 +75,7 @@ Understanding the code
 
 The MainActivity.java file simply contains user interface that launches one of the other activities &#1151; defined in HelloWorldActivity.java and ControlBarActivity.java &#151; in a new view.
 
-### Initializing an OTSession object and connecting to an OpenTok session
+### Adding views for videos
 
 When the HelloWorldActivity activity is created, the app adds layout objects for the publisher and subscriber videos:
 
@@ -84,6 +86,8 @@ These views will display the Publisher and Subscriber videos. A *Publisher* is a
 sent from the Android device to the OpenTok session. A *Subscriber* is an object that represents an audio-video stream from
 the OpenTok session that you display on your device. It can be your own stream or (more commonly) a stream another client
 publishes to the OpenTok session.
+
+### Initializing a Session object and connecting to an OpenTok session
 
 The code then calls a method to instantiate an a Session object and connection to the OpenTok session:
 
@@ -192,8 +196,8 @@ interface is called.
       Log.i(LOGTAG, "session disconnected");
     }
 
-If an app cannot connect to the session (perhaps because of no network connection), the OTSubscriberDelegate is sent
-the `onSessionException()` method of the Session.Listener interface is called:
+If an app cannot connect to the session (perhaps because of no network connection), the `onSessionException()` method
+of the Session.Listener interface is called:
 
     @Override
     public void onSessionException(OpentokException exception) {

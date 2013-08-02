@@ -53,7 +53,6 @@ public class HelloWorldActivity extends Activity implements Publisher.Listener, 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.main_layout);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         
         publisherViewContainer = (RelativeLayout) findViewById(R.id.publisherview);
         subscriberViewContainer = (RelativeLayout) findViewById(R.id.subscriberview);
@@ -134,8 +133,12 @@ public class HelloWorldActivity extends Activity implements Publisher.Listener, 
     @Override
     public void onSessionDroppedStream(Stream stream) {
         Log.i(LOGTAG, String.format("stream dropped", stream.toString()));
-        subscriber = null;
-        subscriberViewContainer.removeAllViews();
+        
+        boolean isMyStream = session.getConnection().equals(stream.getConnection());
+        if ((SUBSCRIBE_TO_SELF && isMyStream) || (!SUBSCRIBE_TO_SELF && !isMyStream)) {
+            subscriber = null;
+            subscriberViewContainer.removeAllViews();
+        }
     }
 
     @SuppressWarnings("unused")
